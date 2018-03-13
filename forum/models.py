@@ -1,17 +1,22 @@
 from django.db import models
 
+
 # Create your models here.
 
-class Post(models.Model):
+class Board(models.Model):
+    name = models.CharField(max_length=6)
 
-    text = models.CharField(max_length=600)
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    is_OP = models.BooleanField(default=False)
+    def __str__(self):
+        return "/{}/".format(self.name)
+
 
 class Thread(models.Model):
     is_pinned = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
-class Board(models.Model):
-    name = models.CharField(max_length=6)
+
+class Post(models.Model):
+    text = models.CharField(max_length=600)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    is_OP = models.BooleanField(default=False)
