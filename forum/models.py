@@ -11,3 +11,7 @@ class Post(models.Model):
 class Thread(models.Model):
     is_pinned = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+class Board(models.Model):
+    name = models.CharField(max_length=6)
