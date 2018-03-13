@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import {DataProvider} from './DataProvider'
+import {Sidebar} from './Sidebar'
 //import logo from './logo.svg';
 //import '../App.css';
 
