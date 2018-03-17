@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for thread in threads %}
+        {{ thread.number }}
+    {% endfor %}
+{% endblock %}
