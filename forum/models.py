@@ -5,6 +5,8 @@ from django.db import models
 
 class Board(models.Model):
     name = models.CharField(max_length=6)
+    bump_limit = models.IntegerField(default=500)
+    thread_limit = models.IntegerField(default=50)
 
     def __str__(self):
         return "/{}/".format(self.name)
