@@ -19,6 +19,7 @@ class Thread(models.Model):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     OP = models.GenericIPAddressField()
     created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "Thread №{}".format(self.number)

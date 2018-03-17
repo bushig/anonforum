@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="col-6 col-md">
     {% for thread in threads %}
-        {{ thread.number }}
+        <div class="card">
+            <div class="card-body">
+              <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">{{ thread.created }}</h6>
+              <p class="card-text">You can also try different version of Bootstrap V4 side menu. Click below link to view all Bootstrap Menu versions.</p>
+              <a href="https://bootsnipp.com/pradeep330" class="card-link">Reply</a>
+            </div>
+          </div>
     {% endfor %}
+    </div>
 {% endblock %}

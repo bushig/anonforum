@@ -1,6 +1,7 @@
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from django.views.generic import TemplateView, View
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 
 from .models import Board, Thread,  Post
 from .serializers import BoardSerializer, PostSerializer, ThreadSerializer
@@ -16,9 +17,7 @@ class IndexPage(View):
 class ThreadList(View):
     def get(self, request, *args, **kwargs):
         board = kwargs.get('board')
-        if board:
-            threads = Thread.objects.filter(board__name=board, is_archived=False)
-            context = {'board': board, 'threads': threads}
-            return render(request, 'threads_list.html', context)
-        else:
-            pass #TODO: 404 page
+        get_object_or_404(Board, name=board)
+        threads = Thread.objects.filter(board__name=board, is_archived=False)
+        context = {'board': board, 'threads': threads}
+        return render(request, 'threads_list.html', context)
