@@ -21,3 +21,7 @@ class ThreadList(View):
         threads = Thread.objects.filter(board__name=board, is_archived=False)
         context = {'board': board, 'threads': threads}
         return render(request, 'threads_list.html', context)
+
+class ThreadView(View):
+    def get(self):
+        pass

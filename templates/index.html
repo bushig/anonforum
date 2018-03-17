@@ -6,7 +6,7 @@
             <h5>Борды:</h5>
             <ul class="list-unstyled text-small">
                 {% for board in boards %}
-                    <li><a class="text-success" href="#">/{{ board.name }}/</a></li>
+                    <li><a class="text-success" href="{% url 'thread-list' board.name %}">/{{ board.name }}/</a></li>
                 {% endfor %}
             </ul>
         </div>

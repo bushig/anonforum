@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.db.models.signals import pre_save
 
 # Create your models here.
 
@@ -13,7 +13,7 @@ class Board(models.Model):
 
 
 class Thread(models.Model):
-    number = models.IntegerField()
+    number = models.PositiveIntegerField(blank=True, null=True)
     is_pinned = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
@@ -26,7 +26,7 @@ class Thread(models.Model):
 
 
 class Post(models.Model):
-    number = models.IntegerField()
+    number = models.PositiveIntegerField(blank=True, null=True)
     text = models.CharField(max_length=600)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     is_OP = models.BooleanField(default=False)
@@ -34,3 +34,20 @@ class Post(models.Model):
 
     def __str__(self):
         return "Post №{}".format(self.number)
+
+def update_thread_or_post_number(sender, instance, *args, **kwargs):
+    if instance.number and instance.number != "":
+        print(instance.number)
+    else:
+        if sender == Thread:
+            last_record = sender.objects.filter(board=instance.board).last()
+        elif sender == Post:
+            last_record = sender.objects.filter(thread=instance.thread).last()
+        if last_record:
+            instance.number = last_record.number + 1
+        else:
+            instance.number = 1
+
+
+pre_save.connect(update_thread_or_post_number, Thread)
+pre_save.connect(update_thread_or_post_number, Post)
