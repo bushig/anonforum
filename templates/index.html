@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-6 col-md">
-            <h5>Борды:</h5>
-            <ul class="list-unstyled text-small">
-                {% for board in boards %}
-                    <li><a class="text-success" href="{% url 'thread-list' board.name %}">/{{ board.name }}/</a></li>
-                {% endfor %}
-            </ul>
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="row">
+            <div class="col-6 col-md">
+                <h5>Борды:</h5>
+                <ul class="list-unstyled text-small">
+                    {% for board in boards %}
+                        <li><a class="text-success" href="{% url 'thread-list' board.name %}">/{{ board.name }}/</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

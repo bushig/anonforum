@@ -22,7 +22,7 @@ class Thread(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "Thread №{}".format(self.number)
+        return "/{}/ Thread №{}".format(self.board.name, self.number)
 
 
 class Post(models.Model):
@@ -33,7 +33,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Post №{}".format(self.number)
+        return "/{}/ Post №{}".format(self.thread.board.name, self.number)
 
 def update_thread_or_post_number(sender, instance, *args, **kwargs):
     if instance.number and instance.number != "":

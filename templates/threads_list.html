@@ -2,15 +2,42 @@
 
 {% block content %}
     <div class="col-6 col-md">
-    {% for thread in threads %}
-        <div class="card">
-            <div class="card-body">
-              <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }}</h6>
-              <h6 class="card-subtitle mb-2 text-muted">{{ thread.created }}</h6>
-              <p class="card-text">You can also try different version of Bootstrap V4 side menu. Click below link to view all Bootstrap Menu versions.</p>
-              <a href="https://bootsnipp.com/pradeep330" class="card-link">Reply</a>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                            Create new thread
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <form method="POST">
+                            <label for="email">Email address</label>
+                            <input type="hidden" name="board" value="{{ board }}">
+                            <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"><br>
+                            <textarea class="form-control" name="text"></textarea><br>
+                            <input type="submit" class="btn btn-success">
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-    {% endfor %}
+
+        </div>
+    <br>
+        {% for thread in threads %}
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ thread.created }}</h6>
+                    <p class="card-text">You can also try different version of Bootstrap V4 side menu. Click below link
+                        to view all Bootstrap Menu versions.</p>
+                    <a href="#" class="btn btn-success">Reply</a>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
