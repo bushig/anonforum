@@ -51,3 +51,20 @@ class ThreadView(View):
         thread = Thread.objects.get(number=thread)
         context = {'posts': posts, 'board': board, 'thread': thread}
         return render(request, 'thread.html', context)
+
+    def post(self, request, *args, **kwargs):
+        thread = kwargs.get('thread')
+        form = CreateThreadForm(request.POST or None)
+        if form.is_valid():
+            board = form.cleaned_data['board']
+            text = form.cleaned_data['text']
+            email = form.cleaned_data['email']
+            is_op = form.cleaned_data['is_op']
+
+            thread = Thread.objects.get(number=thread, board__name=board)
+            OP = False
+            if is_op and request.META.get('REMOTE_ADDR') == thread.OP:
+                OP = True
+            post = Post.objects.create(is_OP=OP, text=text, thread=thread)
+            messages.add_message(request, messages.SUCCESS, 'Successfully posted', "alert alert-success")
+            return redirect('thread-view', board=board, thread=thread.number)

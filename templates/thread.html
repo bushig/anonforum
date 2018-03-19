@@ -6,7 +6,7 @@
             <div class="card" style="padding-top: 0">
                 <div class="card-body" id="{{ post.number }}">
                     <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                        <a href="#{{ post.number }}">№{{ post.number }}</a></h6>
+                        <a href="#{{ post.number }}">№{{ post.number }}</a>{% if post.is_OP %} <span class="badge badge-success">OP</span>{% endif %}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
                     <p class="card-text">{{ post.text }}</p>
                 </div>
@@ -23,6 +23,8 @@
                 <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"><br>
                 <label for="text">Post text</label>
                 <textarea rows="10" class="form-control" name="text"></textarea><br>
+                <label for="is_op">Are you OP?</label>
+                <input type="checkbox" id="is_op" name="is_op"><br>
                 <input type="submit" class="btn btn-success">
             </form>
         </div>
