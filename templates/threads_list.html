@@ -19,7 +19,8 @@
                             {% csrf_token %}
                             <label for="email">Email address</label>
                             <input type="hidden" name="board" value="{{ board }}">
-                            <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"><br>
+                            <input type="email" id="email" class="form-control" name="email"
+                                   placeholder="Enter email"><br>
                             <label for="text">Post text</label>
                             <textarea rows="10" class="form-control" name="text"></textarea><br>
                             <input type="submit" class="btn btn-success">
@@ -29,34 +30,51 @@
             </div>
 
         </div>
-    <br>
+        <br>
         {% for thread in threads %}
-                    {% with thread.get_latest_posts as posts %}
-                        {% for post in posts %}
-                            {% if forloop.first %}
-                                <div class="card" style="background-color: #e3ffd7!important;">
-                                <div class="card-body">
-                                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                                        №{{ post.number }}</h6>
-                                    <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
-                                    <h6 class="card-subtitle mb-2 text-muted">Posts count: {{ thread.post_set.count }}</h6>
-                                    <p class="card-text">{{ post.text }}</p>
-                                    <a href="{{ thread.get_absolute_url }}" class="btn btn-success">Reply</a>
-                                </div>
+            {% with thread.get_latest_posts as posts %}
+                {% for post in posts %}
+                    {% if forloop.first %}
+                        <div class="card" style="background-color: #e3ffd7!important;">
+                            <div class="card-body">
+                                <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
+                                    №{{ post.number }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">Posts count: {{ thread.post_set.count }}</h6>
+                                <p class="card-text">{{ post.text }}</p>
+                                <a href="{{ thread.get_absolute_url }}" class="btn btn-success">Reply</a>
                             </div>
-                            {% else %}
-                                <div class="card" style="margin-left: 50px">
-                                <div class="card-body">
-                                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                                        №{{ post.number }}</h6>
-                                    <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
-                                    <p class="card-text">{{ post.text }}</p>
-                                </div>
+                        </div>
+                    {% else %}
+                        <div class="card" style="margin-left: 50px">
+                            <div class="card-body">
+                                <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
+                                    №{{ post.number }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                                <p class="card-text">{{ post.text }}</p>
                             </div>
-                            {% endif %}
+                        </div>
+                    {% endif %}
 
-                    {% endfor %}
-                    {% endwith %}
+                {% endfor %}
+            {% endwith %}
         {% endfor %}
+        <div class="pagination">
+    <span class="step-links">
+        {% if threads.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ threads.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ threads.number }} of {{ threads.paginator.num_pages }}.
+        </span>
+
+        {% if threads.has_next %}
+            <a href="?page={{ threads.next_page_number }}">next</a>
+            <a href="?page={{ threads.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+        </div>
     </div>
 {% endblock %}

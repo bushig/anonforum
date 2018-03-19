@@ -1,13 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for post in posts %}
-        <div class="card">
+    <form method="POST" action="/api/report">
+        {% for post in posts %}
+            <div class="card" style="padding-top: 0">
+                <div class="card-body" id="{{ post.number }}">
+                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
+                        <a href="#{{ post.number }}">№{{ post.number }}</a></h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                    <p class="card-text">{{ post.text }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        <button class="btn btn-danger" type="submit">Report posts</button>
+    </form>
+    <div class="card">
         <div class="card-body">
-            <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                №{{ post.number }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
-            <p class="card-text">{{ post.text }}</p>
+            <form method="POST">
+                {% csrf_token %}
+                <label for="email">Email address</label>
+                <input type="hidden" name="board" value="{{ board }}">
+                <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"><br>
+                <label for="text">Post text</label>
+                <textarea rows="10" class="form-control" name="text"></textarea><br>
+                <input type="submit" class="btn btn-success">
+            </form>
         </div>
-    {% endfor %}
+    </div>
 {% endblock %}

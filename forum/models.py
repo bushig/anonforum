@@ -32,8 +32,15 @@ class Thread(models.Model):
         result = []
         count = self.post_set.all().count()
         all = self.post_set.all().order_by('-id')
-        result.append(all[0])
-        all = all[0:3:-1] # TODO: FIX THIS TO HAVE FIRST ENTRY
+        result.append(all[count-1])
+        if count > 3:
+            all = all[0:3:-1] # TODO: FIX THIS TO HAVE FIRST ENTRY
+        elif count == 3:
+            all = all[0:2:-1]
+        elif count == 2:
+            all = all[0:1:-1]
+        else:
+            all = []
         for post in all:
             result.append(post)
         return result
