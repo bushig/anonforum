@@ -16,10 +16,12 @@
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
                         <form method="POST">
+                            {% csrf_token %}
                             <label for="email">Email address</label>
                             <input type="hidden" name="board" value="{{ board }}">
                             <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"><br>
-                            <textarea class="form-control" name="text"></textarea><br>
+                            <label for="text">Post text</label>
+                            <textarea rows="10" class="form-control" name="text"></textarea><br>
                             <input type="submit" class="btn btn-success">
                         </form>
                     </div>
@@ -29,15 +31,32 @@
         </div>
     <br>
         {% for thread in threads %}
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ thread.created }}</h6>
-                    <p class="card-text">You can also try different version of Bootstrap V4 side menu. Click below link
-                        to view all Bootstrap Menu versions.</p>
-                    <a href="#" class="btn btn-success">Reply</a>
-                </div>
-            </div>
+                    {% with thread.get_latest_posts as posts %}
+                        {% for post in posts %}
+                            {% if forloop.first %}
+                                <div class="card" style="background-color: #e3ffd7!important;">
+                                <div class="card-body">
+                                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
+                                        №{{ post.number }}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Posts count: {{ thread.post_set.count }}</h6>
+                                    <p class="card-text">{{ post.text }}</p>
+                                    <a href="{{ thread.get_absolute_url }}" class="btn btn-success">Reply</a>
+                                </div>
+                            </div>
+                            {% else %}
+                                <div class="card" style="margin-left: 50px">
+                                <div class="card-body">
+                                    <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
+                                        №{{ post.number }}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                                    <p class="card-text">{{ post.text }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                    {% endfor %}
+                    {% endwith %}
         {% endfor %}
     </div>
 {% endblock %}

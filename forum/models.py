@@ -1,10 +1,11 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.urls import reverse
 
 # Create your models here.
 
 class Board(models.Model):
-    name = models.CharField(max_length=6)
+    name = models.CharField(max_length=6, unique=True)
     bump_limit = models.IntegerField(default=500)
     thread_limit = models.IntegerField(default=50)
 
@@ -23,6 +24,22 @@ class Thread(models.Model):
 
     def __str__(self):
         return "/{}/ Thread №{}".format(self.board.name, self.number)
+
+    def get_latest_posts(self):
+        """
+        Returns first post and 3 latest posts.
+        """
+        result = []
+        count = self.post_set.all().count()
+        all = self.post_set.all().order_by('-id')
+        result.append(all[0])
+        all = all[0:3:-1] # TODO: FIX THIS TO HAVE FIRST ENTRY
+        for post in all:
+            result.append(post)
+        return result
+
+    def get_absolute_url(self):
+        return reverse('thread-view', kwargs={'board':self.board.name, 'thread': self.number})
 
 
 class Post(models.Model):
