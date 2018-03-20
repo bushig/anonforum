@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 
 
 from .models import Board, Thread,  Post
-from .serializers import BoardSerializer, PostSerializer, ThreadSerializer
 from .forms import CreateThreadForm
 
 # Create your views here.
