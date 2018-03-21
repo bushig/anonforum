@@ -19,16 +19,18 @@ class IndexPage(View):
 
 class ThreadList(View):
     def get(self, request, *args, **kwargs):
+        form = CreateThreadForm(request.POST or None)
         board = kwargs.get('board')
         get_object_or_404(Board, name=board)
         threads = Thread.objects.filter(board__name=board, is_archived=False).order_by('-updated')
         paginator = Paginator(threads, 10)
         page = request.GET.get('page', 1)
         threads = paginator.get_page(page)
-        context = {'board': board, 'threads': threads}
+        context = {'board': board, 'threads': threads, 'form': form}
         return render(request, 'threads_list.html', context)
 
     def post(self, request, *args, **kwargs):
+        board = kwargs['board']
         form = CreateThreadForm(request.POST or None)
         if form.is_valid():
             board = form.cleaned_data['board']
@@ -40,20 +42,22 @@ class ThreadList(View):
             return redirect('thread-view', board= board, thread = thread.number)
         else:
             messages.add_message(request, messages.ERROR, "Didn't created a thread because of invalid input.", "alert alert-danger")
-            raise Http404 # TODO: redirect to ThreadList page
+            return redirect('thread-list', board=board)
 
 class ThreadView(View):
     def get(self, request, *args, **kwargs):
+        form = CreateThreadForm(request.POST or None)
         board = kwargs.get('board')
         thread = kwargs.get('thread')
         posts = Post.objects.filter(thread__number = thread)
         thread = Thread.objects.get(number=thread)
-        context = {'posts': posts, 'board': board, 'thread': thread}
+        context = {'posts': posts, 'board': board, 'thread': thread, 'form': form}
         return render(request, 'thread.html', context)
 
     def post(self, request, *args, **kwargs):
         thread = kwargs.get('thread')
         form = CreateThreadForm(request.POST or None)
+        board = kwargs.get('board')
         if form.is_valid():
             board = form.cleaned_data['board']
             text = form.cleaned_data['text']
@@ -67,3 +71,6 @@ class ThreadView(View):
             post = Post.objects.create(is_OP=OP, text=text, thread=thread)
             messages.add_message(request, messages.SUCCESS, 'Successfully posted', "alert alert-success")
             return redirect('thread-view', board=board, thread=thread.number)
+        else:
+            context = {'posts': posts, 'board': board, 'thread': thread, 'form': form}
+            raise render(request, 'thread.html', context)

@@ -16,22 +16,25 @@
     {% endblock %}
 </head>
 <body class="bg-light">
-{% block navbar %}
 <div class="navbar navbar-dark bg-dark box-shadow">
     <div class="container d-flex justify-content-between">
         <a href="/" class="navbar-brand d-flex align-items-center">
             <strong>Budaba</strong>
         </a>
+    <ul class="navbar-nav mr-auto">
+        {% block navbar %}
+
+        {% endblock %}
+    </ul>
     </div>
 </div>
 {% if messages %}
     {% for message in messages %}
-    <div {% if message.tags %} class="{{ message.tags }}"{% endif %} role="alert">
-        {{ message }}
-    </div>
-{% endfor %}
+        <div {% if message.tags %} class="{{ message.tags }}"{% endif %} role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endif %}
-{% endblock %}
 <div class="container">
     {% block content %}
         <!-- Content here -->

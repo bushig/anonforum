@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block navbar %}
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'thread-list' board=board %}">/{{ board }}/ <span class="sr-only">(current)</span></a>
+      </li>
+{% endblock %}
+
 {% block content %}
     <form method="POST" action="/api/report">
         {% for post in posts %}
@@ -25,6 +31,7 @@
                 <textarea rows="10" class="form-control" name="text"></textarea><br>
                 <label for="is_op">Are you OP?</label>
                 <input type="checkbox" id="is_op" name="is_op"><br>
+                {{ form.captcha }}
                 <input type="submit" class="btn btn-success">
             </form>
         </div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'forum',
 
     'rest_framework',
+    'captcha',
 
     'debug_toolbar',
     'autofixture',
