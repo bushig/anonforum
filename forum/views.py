@@ -21,7 +21,7 @@ class ThreadList(View):
     def get(self, request, *args, **kwargs):
         board = kwargs.get('board')
         get_object_or_404(Board, name=board)
-        threads = Thread.objects.filter(board__name=board, is_archived=False)
+        threads = Thread.objects.filter(board__name=board, is_archived=False).order_by('-updated')
         paginator = Paginator(threads, 10)
         page = request.GET.get('page', 1)
         threads = paginator.get_page(page)

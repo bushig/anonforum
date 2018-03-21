@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 
 # Create your models here.
@@ -66,12 +66,17 @@ def update_thread_or_post_number(sender, instance, *args, **kwargs):
         if sender == Thread:
             last_record = sender.objects.filter(board=instance.board).last()
         elif sender == Post:
-            last_record = sender.objects.filter(thread=instance.thread).last()
+            last_record = sender.objects.filter(thread__board=instance.thread.board).last()
         if last_record:
             instance.number = last_record.number + 1
         else:
             instance.number = 1
 
+def bump_thread(sender, instance, *args, **kwargs):
+    thread = instance.thread
+    thread.save() # Should bump
 
 pre_save.connect(update_thread_or_post_number, Thread)
 pre_save.connect(update_thread_or_post_number, Post)
+
+post_save.connect(bump_thread, Post)
