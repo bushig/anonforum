@@ -22,7 +22,7 @@ class ThreadList(View):
         form = CreateThreadForm(request.POST or None)
         board = kwargs.get('board')
         get_object_or_404(Board, name=board)
-        threads = Thread.objects.filter(board__name=board, is_archived=False).order_by('-updated')
+        threads = Thread.objects.filter(board__name=board, is_archived=False).prefetch_related('board').order_by('-updated')
         paginator = Paginator(threads, 10)
         page = request.GET.get('page', 1)
         threads = paginator.get_page(page)
@@ -72,5 +72,5 @@ class ThreadView(View):
             messages.add_message(request, messages.SUCCESS, 'Successfully posted', "alert alert-success")
             return redirect('thread-view', board=board, thread=thread.number)
         else:
-            context = {'posts': posts, 'board': board, 'thread': thread, 'form': form}
-            raise render(request, 'thread.html', context)
+            messages.add_message(request, messages.ERROR, "Didn't created a post because of invalid input.", "alert alert-danger")
+            return redirect('thread-view', board=board, thread=thread)

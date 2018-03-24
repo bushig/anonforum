@@ -62,8 +62,7 @@
                 {% endfor %}
             {% endwith %}
         {% endfor %}
-        <div class="text-xs-center">
-            <ul class="pagination">
+            <ul class="pagination justify-content-center">
                 {% if threads.has_previous %}
                     <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
                     <li class="page-item"><a class="page-link"
@@ -71,7 +70,7 @@
                 {% endif %}
 
                 <li class="page-item disabled">
-                    <a class="page-link">Page {{ threads.number }} of {{ threads.paginator.num_pages }}.</a>
+                    <a class="page-link">Page {{ threads.number }} of {{ threads.paginator.num_pages }}</a>
                 </li>
 
                 {% if threads.has_next %}
@@ -80,6 +79,5 @@
                                              href="?page={{ threads.paginator.num_pages }}">last &raquo;</a></li>
                 {% endif %}
             </ul>
-        </div>
     </div>
 {% endblock %}
