@@ -145,6 +145,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -156,3 +159,20 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication'
     ]
 }
+
+
+MULTIUPLOADER_FILES_FOLDER = 'media'
+MULTIUPLOADER_FORMS_SETTINGS ={
+'default': {
+    'FILE_TYPES' : ["jpg","jpeg","webm", "mp4","png", "gif"],
+    'CONTENT_TYPES' : [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'video/mp4',
+            'video/webm',
+                ],
+    'MAX_FILE_SIZE': 10485760,
+    'MAX_FILE_NUMBER':3,
+'AUTO_UPLOAD': True,
+}}

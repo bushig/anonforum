@@ -15,7 +15,7 @@
 
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
-                        <form method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="email">Email address</label>
                             <input type="hidden" name="board" value="{{ board }}">
@@ -23,6 +23,11 @@
                                    placeholder="Enter email"><br>
                             <label for="text">Post text</label>
                             <textarea rows="10" class="form-control" name="text"></textarea><br>
+                            {% for upload_form in upload_forms %}
+                                {{ upload_form }}
+                            {% endfor %}
+                            {{ upload_forms.management_form }}
+                            <br>
                             {{ form.captcha }}
                             <input type="submit" class="btn btn-success">
                         </form>

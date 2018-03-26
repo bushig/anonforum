@@ -48,6 +48,16 @@ class Thread(models.Model):
     def get_absolute_url(self):
         return reverse('thread-view', kwargs={'board':self.board.name, 'thread': self.number})
 
+class MediaFile(models.Model):
+    choices = (('jpeg', 'JPEG'),
+               ('png', 'PNG'),
+               ('webm', 'WEBM'),
+               ('mp4', 'MP4'),)
+    md5 = models.CharField(max_length=32)
+    file = models.FileField()
+    type = models.CharField(choices=choices, max_length=4)
+    created = models.DateTimeField(auto_now_add=True)
+
 
 class Post(models.Model):
     number = models.PositiveIntegerField(blank=True, null=True)
@@ -55,9 +65,11 @@ class Post(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     is_OP = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    mediafile = models.ManyToManyField(MediaFile)
 
     def __str__(self):
         return "/{}/ Post №{}".format(self.thread.board.name, self.number)
+
 
 def update_thread_or_post_number(sender, instance, *args, **kwargs):
     if instance.number and instance.number != "":
