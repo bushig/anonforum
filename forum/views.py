@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.core.files.storage import FileSystemStorage
 
 from .models import Board, Thread,  Post
 from .forms import CreateThreadForm, MediaUpload
@@ -41,8 +42,10 @@ class ThreadList(View):
             thread = Thread.objects.create(board=board_obj, OP=request.META.get('REMOTE_ADDR'))
             upload_forms.save(commit=False)
             #TODO: generate md5 and select image type
-            upload_forms.save()
             OP_post = Post.objects.create(is_OP=True, text=text, thread=thread)
+            if upload_forms.cleaned_data["file"]:
+                upload_forms.save()
+                OP_post.mediafile.add(upload_forms.instance)
             OP_post.mediafile.add(upload_forms.instance)
             return redirect('thread-view', board= board, thread = thread.number)
         else:
@@ -75,9 +78,10 @@ class ThreadView(View):
             OP = False
             if is_op and request.META.get('REMOTE_ADDR') == thread.OP:
                 OP = True
-            upload_forms.save()
             post = Post.objects.create(is_OP=OP, text=text, thread=thread)
-            post.mediafile.add(upload_forms.instance)
+            if upload_forms.cleaned_data["file"]:
+                upload_forms.save()
+                post.mediafile.add(upload_forms.instance)
             messages.add_message(request, messages.SUCCESS, 'Successfully posted', "alert alert-success")
             return redirect('thread-view', board=board, thread=thread.number)
         else:

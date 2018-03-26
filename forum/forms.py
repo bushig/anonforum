@@ -17,5 +17,5 @@ class MediaUpload(forms.ModelForm):
     class Meta:
         model = MediaFile
         fields = ('file',)
-    file = forms.FileField(required=False)
+    file = forms.ImageField(required=False)
     # file = MultiFileField(min_num=0, max_num=3, max_file_size=1024*1024*10)

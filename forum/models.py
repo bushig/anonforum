@@ -54,7 +54,7 @@ class MediaFile(models.Model):
                ('webm', 'WEBM'),
                ('mp4', 'MP4'),)
     md5 = models.CharField(max_length=32)
-    file = models.FileField()
+    file = models.ImageField()
     type = models.CharField(choices=choices, max_length=4)
     created = models.DateTimeField(auto_now_add=True)
 

@@ -2,8 +2,9 @@
 
 {% block navbar %}
     <li class="nav-item active">
-        <a class="nav-link" href="{% url 'thread-list' board=board %}">/{{ board }}/ <span class="sr-only">(current)</span></a>
-      </li>
+        <a class="nav-link" href="{% url 'thread-list' board=board %}">/{{ board }}/ <span
+                class="sr-only">(current)</span></a>
+    </li>
 {% endblock %}
 
 {% block content %}
@@ -12,8 +13,14 @@
             <div class="card" style="padding-top: 0">
                 <div class="card-body" id="{{ post.number }}">
                     <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                        <a href="#{{ post.number }}">№{{ post.number }}</a>{% if post.is_OP %} <span class="badge badge-success">OP</span>{% endif %}</h6>
+                        <a href="#{{ post.number }}">№{{ post.number }}</a>{% if post.is_OP %}
+                            <span class="badge badge-success">OP</span>{% endif %}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
+                    {% with post.mediafile.first as image %}
+                        {% if image %}
+                            <img style="max-width: 100px; max-height: 100px" src="/media/{{ image.file }}"/>
+                        {% endif %}
+                    {% endwith %}
                     <p class="card-text">{{ post.text }}</p>
                 </div>
             </div>
@@ -22,7 +29,7 @@
     </form>
     <div class="card">
         <div class="card-body">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <label for="email">Email address</label>
                 <input type="hidden" name="board" value="{{ board }}">
