@@ -20,8 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('captcha/', include('captcha.urls')),
-    path('', include('forum.urls')),
     path('admin/', admin.site.urls),
+    path('', include('forum.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]
 

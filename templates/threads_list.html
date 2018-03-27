@@ -44,8 +44,10 @@
                         <div class="card" style="background-color: #e3ffd7!important;">
                             <div class="card-body">
                                 <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} Post
-                                    №{{ post.number }}{% if post.is_OP %}
-                                        <span class="badge badge-success">OP</span>{% endif %}</h6>
+                                    №{{ post.number }}
+                                    {% if post.is_OP %}
+                                        <span class="badge badge-success">OP</span>{% endif %}{% if thread.is_pinned %}
+                                        <small style="color: #ff5c1d">Pinned</small>{% endif %}</h6>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
                                 <h6 class="card-subtitle mb-2 text-muted">Posts count: {{ thread.post_set.count }}</h6>
                                 {% with post.mediafile.first as image %}
@@ -77,22 +79,22 @@
                 {% endfor %}
             {% endwith %}
         {% endfor %}
-            <ul class="pagination justify-content-center">
-                {% if threads.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
-                    <li class="page-item"><a class="page-link"
-                                             href="?page={{ threads.previous_page_number }}">previous</a></li>
-                {% endif %}
+        <ul class="pagination justify-content-center">
+            {% if threads.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="?page={{ threads.previous_page_number }}">previous</a></li>
+            {% endif %}
 
-                <li class="page-item disabled">
-                    <a class="page-link">Page {{ threads.number }} of {{ threads.paginator.num_pages }}</a>
-                </li>
+            <li class="page-item disabled">
+                <a class="page-link">Page {{ threads.number }} of {{ threads.paginator.num_pages }}</a>
+            </li>
 
-                {% if threads.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ threads.next_page_number }}">next</a></li>
-                    <li class="page-item"><a class="page-link"
-                                             href="?page={{ threads.paginator.num_pages }}">last &raquo;</a></li>
-                {% endif %}
-            </ul>
+            {% if threads.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ threads.next_page_number }}">next</a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="?page={{ threads.paginator.num_pages }}">last &raquo;</a></li>
+            {% endif %}
+        </ul>
     </div>
 {% endblock %}

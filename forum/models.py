@@ -25,6 +25,8 @@ class Thread(models.Model):
     def __str__(self):
         return "/{}/ Thread №{}".format(self.board.name, self.number)
 
+    class Meta:
+        ordering = ['-is_pinned', '-updated']
     def get_latest_posts(self):
         """
         Returns first post and 3 latest posts.

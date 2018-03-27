@@ -23,7 +23,7 @@ class ThreadList(View):
         upload_forms = MediaUpload()
         board = kwargs.get('board')
         get_object_or_404(Board, name=board)
-        threads = Thread.objects.filter(board__name=board, is_archived=False).prefetch_related('board').order_by('-updated')
+        threads = Thread.objects.filter(board__name=board, is_archived=False).prefetch_related('board')
         paginator = Paginator(threads, 10)
         page = request.GET.get('page', 1)
         threads = paginator.get_page(page)
