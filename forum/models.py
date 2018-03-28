@@ -74,6 +74,8 @@ class Post(models.Model):
     def __str__(self):
         return "/{}/ Post №{}".format(self.thread.board.name, self.number)
 
+    def get_absolute_url(self):
+        return "/{}/{}#{}".format(self.thread.board.name, self.thread.number, self.number)
 
 def update_thread_or_post_number(sender, instance, *args, **kwargs):
     if instance.number and instance.number != "":

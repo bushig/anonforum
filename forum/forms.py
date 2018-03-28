@@ -1,7 +1,6 @@
 from django import forms
 
 from captcha.fields import CaptchaField
-from multiupload.fields import MultiFileField
 
 from .models import MediaFile
 

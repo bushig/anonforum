@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'captcha',
+    'haystack',
 
     'debug_toolbar',
     'autofixture',
@@ -161,18 +162,17 @@ REST_FRAMEWORK = {
 }
 
 
-MULTIUPLOADER_FILES_FOLDER = 'media'
-MULTIUPLOADER_FORMS_SETTINGS ={
-'default': {
-    'FILE_TYPES' : ["jpg","jpeg","webm", "mp4","png", "gif"],
-    'CONTENT_TYPES' : [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'video/mp4',
-            'video/webm',
-                ],
-    'MAX_FILE_SIZE': 10485760,
-    'MAX_FILE_NUMBER':3,
-'AUTO_UPLOAD': True,
-}}
+# HAYSTACK_CONNECTIONS = {
+    #           'default': {
+    #                 'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+    #                 'URL': 'http://127.0.0.1:9200/',
+    #                 'INDEX_NAME': 'haystack_books',
+    #           },
+    # }
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
