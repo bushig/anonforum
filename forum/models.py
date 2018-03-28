@@ -19,6 +19,7 @@ class Thread(models.Model):
     is_archived = models.BooleanField(default=False)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     OP = models.GenericIPAddressField()
+    bumplimit = models.IntegerField(default=500)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -34,7 +35,8 @@ class Thread(models.Model):
         result = []
         count = self.post_set.all().count()
         all = self.post_set.all().order_by('-id')
-        result.append(all[count-1])
+        if count > 0:
+            result.append(all[count-1])
         if count > 3:
             all = all[0:3:-1] # TODO: FIX THIS TO HAVE FIRST ENTRY
         elif count == 3:
@@ -67,7 +69,7 @@ class Post(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     is_OP = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    mediafile = models.ManyToManyField(MediaFile)
+    mediafile = models.ManyToManyField(MediaFile, blank=True)
 
     def __str__(self):
         return "/{}/ Post №{}".format(self.thread.board.name, self.number)
@@ -88,7 +90,8 @@ def update_thread_or_post_number(sender, instance, *args, **kwargs):
 
 def bump_thread(sender, instance, *args, **kwargs):
     thread = instance.thread
-    thread.save() # Should bump
+    if thread.post_set.count() < thread.bumplimit:
+        thread.save() # Should bump
 
 pre_save.connect(update_thread_or_post_number, Thread)
 pre_save.connect(update_thread_or_post_number, Post)

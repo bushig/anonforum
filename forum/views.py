@@ -6,16 +6,17 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.files.storage import FileSystemStorage
 
-from .models import Board, Thread,  Post
+from .models import Board, Thread, Post
 from .forms import CreateThreadForm, MediaUpload
+
 
 # Create your views here.
 class IndexPage(View):
-
     def get(self, request, *args, **kwargs):
         boards = Board.objects.all()
         context = {'boards': boards}
         return render(request, 'index.html', context)
+
 
 class ThreadList(View):
     def get(self, request, *args, **kwargs):
@@ -23,7 +24,7 @@ class ThreadList(View):
         upload_forms = MediaUpload()
         board = kwargs.get('board')
         get_object_or_404(Board, name=board)
-        threads = Thread.objects.filter(board__name=board, is_archived=False).prefetch_related('board')
+        threads = Thread.objects.filter(board__name=board, is_archived=False).prefetch_related('board')[:100]  # 10 pages
         paginator = Paginator(threads, 10)
         page = request.GET.get('page', 1)
         threads = paginator.get_page(page)
@@ -41,16 +42,18 @@ class ThreadList(View):
             board_obj = Board.objects.get(name=board)
             thread = Thread.objects.create(board=board_obj, OP=request.META.get('REMOTE_ADDR'))
             upload_forms.save(commit=False)
-            #TODO: generate md5 and select image type
+            # TODO: generate md5 and select image type
             OP_post = Post.objects.create(is_OP=True, text=text, thread=thread)
             if upload_forms.cleaned_data["file"]:
                 upload_forms.save()
                 OP_post.mediafile.add(upload_forms.instance)
             OP_post.mediafile.add(upload_forms.instance)
-            return redirect('thread-view', board= board, thread = thread.number)
+            return redirect('thread-view', board=board, thread=thread.number)
         else:
-            messages.add_message(request, messages.ERROR, "Didn't created a thread because of errors", "alert alert-danger")
+            messages.add_message(request, messages.ERROR, "Didn't created a thread because of errors",
+                                 "alert alert-danger")
             return redirect('thread-list', board=board)
+
 
 class ThreadView(View):
     def get(self, request, *args, **kwargs):
@@ -58,7 +61,7 @@ class ThreadView(View):
         upload_forms = MediaUpload(data=request.POST or None, files=request.FILES or None)
         board = kwargs.get('board')
         thread = kwargs.get('thread')
-        posts = Post.objects.filter(thread__number = thread)
+        posts = Post.objects.filter(thread__number=thread)
         thread = Thread.objects.get(number=thread)
         context = {'posts': posts, 'board': board, 'thread': thread, 'form': form, 'form2': upload_forms}
         return render(request, 'thread.html', context)
@@ -85,5 +88,6 @@ class ThreadView(View):
             messages.add_message(request, messages.SUCCESS, 'Successfully posted', "alert alert-success")
             return redirect('thread-view', board=board, thread=thread.number)
         else:
-            messages.add_message(request, messages.ERROR, "Didn't created a post because of invalid input.", "alert alert-danger")
+            messages.add_message(request, messages.ERROR, "Didn't created a post because of invalid input.",
+                                 "alert alert-danger")
             return redirect('thread-view', board=board, thread=thread)
