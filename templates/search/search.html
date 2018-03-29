@@ -18,18 +18,33 @@
             <h3>Results</h3>
 
             {% for result in page.object_list %}
-                <p>
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.text }}</a>
-                </p>
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} <a
+                                href="{{ result.object.get_absolute_url }}">Post
+                            №{{ result.object.number }}</a>{% if result.object.is_OP %}
+                            <span class="badge badge-success">OP</span>{% endif %}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ result.object.created }}</h6>
+                        {% with result.object.mediafile.first as image %}
+                            {% if image %}
+                                <img style="max-width: 100px; max-height: 100px" src="/media/{{ image.file }}"/>
+                            {% endif %}
+                        {% endwith %}
+                        <p class="card-text">{{ result.object.text }}</p>
+                    </div>
+                </div>
             {% empty %}
                 <p>No results found.</p>
             {% endfor %}
 
             {% if page.has_previous or page.has_next %}
                 <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    {% if page.has_previous %}
+                        <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous
+                    {% if page.has_previous %}</a>{% endif %}
                     |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}
+                    Next &raquo;{% if page.has_next %}</a>{% endif %}
                 </div>
             {% endif %}
         {% else %}
