@@ -20,8 +20,8 @@
             {% for result in page.object_list %}
                 <div class="card">
                     <div class="card-body">
-                        <h6 class="card-title"><input type="checkbox"> Thread №{{ thread.number }} <a
-                                href="{{ result.object.get_absolute_url }}">Post
+                        <h6 class="card-title"><input type="checkbox"> Thread №{{ result.object.thread.number }} Post<a
+                                href="{{ result.object.get_absolute_url }}">
                             №{{ result.object.number }}</a>{% if result.object.is_OP %}
                             <span class="badge badge-success">OP</span>{% endif %}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">{{ result.object.created }}</h6>
