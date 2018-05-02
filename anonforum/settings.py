@@ -25,7 +25,7 @@ SECRET_KEY = 'ipzl7cg+@3d%iqc&bmp_mgdj0xar9+w3!orfd-258p)*x*y#53'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['budaba.tk', 'localhost']
 
 INTERNAL_IPS = ('127.0.0.1',)
 # Application definition

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load forum_tags %}
 {% block navbar %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'thread-list' board=board %}">/{{ board }}/</a>
@@ -17,10 +17,10 @@
                     <h6 class="card-subtitle mb-2 text-muted">{{ post.created }}</h6>
                     {% with post.mediafile.first as image %}
                         {% if image %}
-                            <img style="max-width: 100px; max-height: 100px" src="/media/{{ image.file }}"/>
+                            <a href="/media/{{ image.file }}"><img style="max-width: 100px; max-height: 100px" src="/media/{{ image.file }}"/></a>
                         {% endif %}
                     {% endwith %}
-                    <p class="card-text">{{ post.text }}</p>
+                    <p class="card-text">{{ post.text|markdown }}</p>
                 </div>
             </div>
         {% endfor %}
